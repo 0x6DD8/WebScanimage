@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
             scanbutton.removeAttribute('disabled');
             loadingscreen.style.visibility = 'hidden';
             num = num + 1;
+            clonedTemplate.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
         })
         .catch(error => console.log('error', error));
 
