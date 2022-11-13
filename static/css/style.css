@@ -60,3 +60,8 @@ h1 {
         transform: rotate(1turn)
     }
 }
+
+
+.template {
+    visibility: hidden;
+}
