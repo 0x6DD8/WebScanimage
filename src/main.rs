@@ -33,9 +33,16 @@ async fn scanimage(req_body: String) -> impl Responder {
             filename = file_name
         ))
         .spawn()
-        .expect("failed to scan image");
+        .unwrap();
+    
+    //For some reasons scanimage doesnt wait the scan is finished, so just wait ~1 min
+    let mut wait_command = Command::new("sleep")
+        .arg("60")
+        .spawn()
+        .unwrap();
 
-    println!("new Image Scanned: scan_{}.{} ", file_name, file_format);
+    wait_command.wait().unwrap();
+    println!("new Image Scanned: {}.{} ", file_name, file_format);
     
 
     let response = json!({
