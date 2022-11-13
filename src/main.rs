@@ -52,7 +52,7 @@ async fn main() -> std::io::Result<()> {
         .service(scanimage)
         .service(fs::Files::new("/scans", SCANS_PATH).show_files_listing())
         .service(fs::Files::new("/", "./static").index_file("index.html")))
-            .bind(("127.0.0.1", PORT))?
+            .bind(("0.0.0.0", PORT))?
             .run()
             .await
 }
