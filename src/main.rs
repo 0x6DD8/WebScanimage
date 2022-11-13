@@ -1,16 +1,13 @@
-use actix_web::{get, post, App, HttpResponse, HttpServer, Responder};
+use actix_web::{post, App, HttpResponse, HttpServer, Responder};
 use rand::Rng;
 use serde_json::json;
-use std::process::Command;
+use std::{process::Command};
+use actix_files as fs;
 
 //HTTP server port.
 const PORT: u16 = 8080;
 const SCANS_PATH: &str = "./scans/";
 
-#[get("/")]
-async fn index() -> impl Responder {
-    HttpResponse::Ok().body("Nothing yet")
-}
 
 #[post("/api/scanimage")]
 async fn scanimage(req_body: String) -> impl Responder {
@@ -52,8 +49,9 @@ async fn scanimage(req_body: String) -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| App::new()
-        .service(index)
-        .service(scanimage))
+        .service(fs::Files::new("/scans", SCANS_PATH).show_files_listing())
+        .service(scanimage)
+        .service(fs::Files::new("/", "./static").index_file("index.html")))
             .bind(("127.0.0.1", PORT))?
             .run()
             .await
