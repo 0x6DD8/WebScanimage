@@ -35,9 +35,9 @@ async fn scanimage(req_body: String) -> impl Responder {
         .spawn()
         .unwrap();
     
-    //For some reasons scanimage doesnt wait the scan is finished, so just wait ~1 min
+    //For some reasons scanimage doesnt wait the scan is finished, so just wait some time.
     let mut wait_command = Command::new("sleep")
-        .arg("60")
+        .arg("40")
         .spawn()
         .unwrap();
 
