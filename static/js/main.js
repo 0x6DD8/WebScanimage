@@ -6,12 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         const select = document.getElementById("fileformats");
         const scanquality = document.getElementById("scanquality");
+        const scanbutton = document.getElementById('scanbutton');
+        const loadingscreen = document.getElementById('loadingscreen');
 
         const data = {
             "format": select.value,
             "resolution": scanquality.value
         }
-
+        loadingscreen.style.visibility = 'visible'
+        scanbutton.setAttribute("disabled", "");
+        
         await fetch('/api/scanimage', {
             method: 'POST',
             headers: {
@@ -25,6 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let imgEl = document.createElement('img');
             imgEl.src = `/scans/${parsedData.fileName}.${parsedData.fileFormat}`;
             imgContainer.appendChild(imgEl);
+            scanbutton.removeAttribute('disabled');
+            loadingscreen.style.visibility = 'hidden';
         })
         .catch(error => console.log('error', error));
 
