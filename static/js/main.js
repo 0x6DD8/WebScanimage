@@ -42,6 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
             imgContainer.appendChild(imgEl);
             imgContainer.appendChild(clonedTemplate);
             clonedTemplate.setAttribute('data-num', num);
+            let downloadButt = clonedTemplate.getElementsByClassName('download');
+            downloadButt[0].setAttribute('href', `/scans/${parsedData.fileName}.${parsedData.fileFormat}`);
+            downloadButt[0].setAttribute('download', `${parsedData.fileName}.${parsedData.fileFormat}`)
 
             let button = clonedTemplate.getElementsByClassName('button');
             
