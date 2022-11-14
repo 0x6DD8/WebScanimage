@@ -1,10 +1,10 @@
 # Webscanimage
-A web frontend written in **rust** as backend/api 
+A web frontend for `scanimage` cli-command, written in **rust** as backend/api 
 and vanilia **html/css/js** as frontend
 
 
 # Build
-Either build with:
+Either create a `scans` directory in the root of this project and then build with:
  ```sh
  cargo build --release`
  ```
