@@ -31,7 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(parsedData);
             let imgEl = document.createElement('img');
             let clonedTemplate = templateNode.cloneNode(true);
-            const imgPath =`/scans/${parsedData.fileName}.${parsedData.fileFormat}`;
+            //const imgPath =`/scans/${parsedData.fileName}.${parsedData.fileFormat}`;
+            const imgPath = '/scans/scan_42300001042.png'
             clonedTemplate.classList.remove('template');
 
             imgEl.src = imgPath;
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 var img = new Image();
                 img.src = imgPath;
                 console.log(img.width, img.height);
-                var doc = new jspdf.jsPDF({format: 'a1'}); 
+                var doc = new jspdf.jsPDF({format: 'a3', unit: 'px'}); 
                 doc.addImage(img, parsedData.fileFormat, 0, 0, img.width, img.height);
                 doc.save("export.pdf");
             });
