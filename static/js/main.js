@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(parsedData);
             let imgEl = document.createElement('img');
             let clonedTemplate = templateNode.cloneNode(true);
-            //const imgPath =`/scans/${parsedData.fileName}.${parsedData.fileFormat}`;
-            const imgPath = '/scans/scan_42300001042.png'
+            const imgPath =`/scans/${parsedData.fileName}.${parsedData.fileFormat}`;
+
             clonedTemplate.classList.remove('template');
 
             imgEl.src = imgPath;
