@@ -31,11 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(parsedData);
             let imgEl = document.createElement('img');
             let clonedTemplate = templateNode.cloneNode(true);
-            
-
+            const imgPath =`/scans/${parsedData.fileName}.${parsedData.fileFormat}`;
             clonedTemplate.classList.remove('template');
 
-            imgEl.src = `/scans/${parsedData.fileName}.${parsedData.fileFormat}`;
+            imgEl.src = imgPath;
             imgEl.setAttribute('data-num', num);
             
             
@@ -43,22 +42,31 @@ document.addEventListener("DOMContentLoaded", () => {
             imgContainer.appendChild(clonedTemplate);
             clonedTemplate.setAttribute('data-num', num);
             let downloadButt = clonedTemplate.getElementsByClassName('download');
-            downloadButt[0].setAttribute('href', `/scans/${parsedData.fileName}.${parsedData.fileFormat}`);
+            downloadButt[0].setAttribute('href', imgPath);
             downloadButt[0].setAttribute('download', `${parsedData.fileName}.${parsedData.fileFormat}`)
 
             let button = clonedTemplate.getElementsByClassName('button');
-            
+            let pdfbutton = clonedTemplate.getElementsByClassName('pdfbutton');
             let currentNum = num;
+
+
+            pdfbutton[0].addEventListener('click', (e) => {
+                var img = new Image();
+                img.src = imgPath;
+                console.log(img.width, img.height);
+                var doc = new jspdf.jsPDF({format: 'a1'}); 
+                doc.addImage(img, parsedData.fileFormat, 0, 0, img.width, img.height);
+                doc.save("export.pdf");
+            });
+
             button[0].addEventListener('click', (e) => {
-                console.log('aa')
-                
-                console.log(document.querySelectorAll(`[data-num="${currentNum}"]`), num);
+
                 document.querySelectorAll(`[data-num="${currentNum}"]`).forEach((el) => {
                     console.log(el);
                     el.remove();
                 });
             });
-
+            
             scanbutton.removeAttribute('disabled');
             loadingscreen.style.visibility = 'hidden';
             num = num + 1;
