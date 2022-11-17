@@ -52,11 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             pdfbutton[0].addEventListener('click', (e) => {
-                var img = new Image();
+                let img = new Image();
                 img.src = imgPath;
                 console.log(img.width, img.height);
-                var doc = new jspdf.jsPDF({format: 'a3', unit: 'px'}); 
-                doc.addImage(img, parsedData.fileFormat, 0, 0, img.width, img.height);
+                let doc = new jspdf.jsPDF("p", "mm", "a4");
+                let width = doc.internal.pageSize.getWidth();
+                let height = doc.internal.pageSize.getHeight();
+                
+                doc.addImage(img, parsedData.fileFormat, 0, 0, width, height);
                 doc.save("export.pdf");
             });
 
