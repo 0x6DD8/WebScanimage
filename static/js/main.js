@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadingscreen.style.visibility = 'visible'
         scanbutton.setAttribute("disabled", "");
         
-        await fetch('/api/scanimage', {
+        await fetch('./api/scanimage', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(parsedData);
             let imgEl = document.createElement('img');
             let clonedTemplate = templateNode.cloneNode(true);
-            const imgPath =`/scans/${parsedData.fileName}.${parsedData.fileFormat}`;
+            const imgPath =`./scans/${parsedData.fileName}.${parsedData.fileFormat}`;
 
             clonedTemplate.classList.remove('template');
 
@@ -90,7 +90,7 @@ const printImage = async function(filename, fileformat) {
         "filename": filename,
         "format": fileformat
     }
-    await fetch('/api/printimage', {
+    await fetch('./api/printimage', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
