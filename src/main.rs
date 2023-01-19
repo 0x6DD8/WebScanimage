@@ -53,10 +53,47 @@ async fn scanimage(req_body: String) -> impl Responder {
     HttpResponse::Ok().body(response.to_string())
 }
 
+#[post("/api/printimage")]
+async fn printimage(req_body: String) -> impl Responder {
+    //Parse json to string.
+    let formatted_body: serde_json::Value = serde_json::from_str(&req_body).expect("failed to parse json");
+    
+    let file_format = &formatted_body["format"];
+    let file_name = &formatted_body["filename"];
+    print!(
+        "lpr {path}{filename}.{format}",
+        format = file_format,
+        path = SCANS_PATH,
+        filename = file_name
+    );
+    //Execute lpr with parameters
+    Command::new("sh")
+        .arg("-c")
+        .arg(format!(
+            "lpr {path}{filename}.{format}",
+            format = file_format,
+            path = SCANS_PATH,
+            filename = file_name
+        ))
+        .spawn()
+        .unwrap();
+    
+    //For some reasons scanimage doesnt wait the scan is finished, so just wait some time.
+    let mut wait_command = Command::new("sleep")
+        .arg("20")
+        .spawn()
+        .unwrap();
+
+    wait_command.wait().unwrap();
+
+    HttpResponse::Ok()
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| App::new()
         .service(scanimage)
+        .service(printimage)
         .service(fs::Files::new("/scans", SCANS_PATH).show_files_listing())
         .service(fs::Files::new("/", "./static").index_file("index.html")))
             .bind(("0.0.0.0", PORT))?

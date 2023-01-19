@@ -39,6 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
             imgEl.setAttribute('data-num', num);
             
             
+            if (e.submitter.id == "printimage") {
+                printImage(parsedData.fileName, parsedData.fileFormat);
+            }
+
             imgContainer.appendChild(imgEl);
             imgContainer.appendChild(clonedTemplate);
             clonedTemplate.setAttribute('data-num', num);
@@ -80,3 +84,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 })
+
+const printImage = async function(filename, fileformat) {
+    const data = {
+        "filename": filename,
+        "format": fileformat
+    }
+    await fetch('/api/printimage', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }).catch(error => console.log('error', error));
+}
