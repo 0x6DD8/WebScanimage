@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const select = document.getElementById("fileformats");
         const scanquality = document.getElementById("scanquality");
         const scanbutton = document.getElementById('scanbutton');
+        const printbutton = document.getElementById('printimage');
         const loadingscreen = document.getElementById('loadingscreen');
 
 
@@ -18,7 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         loadingscreen.style.visibility = 'visible'
         scanbutton.setAttribute("disabled", "");
-        
+        printbutton.setAttribute("disabled", "");
+
         await fetch('./api/scanimage', {
             method: 'POST',
             headers: {
@@ -76,6 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             
             scanbutton.removeAttribute('disabled');
+            printbutton.removeAttribute('disabled');
+        
             loadingscreen.style.visibility = 'hidden';
             num = num + 1;
             clonedTemplate.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
