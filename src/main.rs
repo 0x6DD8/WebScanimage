@@ -23,7 +23,7 @@ async fn scanimage(req_body: String) -> impl Responder {
 
 
     //Execute scanimage with parameters
-    Command::new("sh")
+    let mut scanimage_command = Command::new("sh")
         .arg("-c")
         .arg(format!(
             "scanimage --resolution {resolution} --format={format}>{path}{filename}.{format}",
@@ -35,13 +35,8 @@ async fn scanimage(req_body: String) -> impl Responder {
         .spawn()
         .unwrap();
     
-    //For some reasons scanimage doesnt wait the scan is finished, so just wait some time.
-    let mut wait_command = Command::new("sleep")
-        .arg("40")
-        .spawn()
-        .unwrap();
+    scanimage_command.wait().unwrap();
 
-    wait_command.wait().unwrap();
     println!("new Image Scanned: {}.{} ", file_name, file_format);
     
 
@@ -60,14 +55,9 @@ async fn printimage(req_body: String) -> impl Responder {
     
     let file_format = &formatted_body["format"];
     let file_name = &formatted_body["filename"];
-    print!(
-        "lpr {path}{filename}.{format}",
-        format = file_format,
-        path = SCANS_PATH,
-        filename = file_name
-    );
+    
     //Execute lpr with parameters
-    Command::new("sh")
+    let mut lpr_command = Command::new("sh")
         .arg("-c")
         .arg(format!(
             "lpr {path}{filename}.{format}",
@@ -78,19 +68,14 @@ async fn printimage(req_body: String) -> impl Responder {
         .spawn()
         .unwrap();
     
-    //For some reasons scanimage doesnt wait the scan is finished, so just wait some time.
-    let mut wait_command = Command::new("sleep")
-        .arg("20")
-        .spawn()
-        .unwrap();
-
-    wait_command.wait().unwrap();
+    lpr_command.wait().unwrap();
 
     HttpResponse::Ok()
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("Server Started On Port: {}", PORT);
     HttpServer::new(|| App::new()
         .service(scanimage)
         .service(printimage)
