@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
             imgEl.src = imgPath;
             imgEl.setAttribute('data-num', num);
             
-            
             if (e.submitter.id == "printimage") {
                 printImage(parsedData.fileName, parsedData.fileFormat);
             }
@@ -54,27 +53,17 @@ document.addEventListener("DOMContentLoaded", () => {
             downloadButt[0].setAttribute('href', imgPath);
             downloadButt[0].setAttribute('download', `${parsedData.fileName}.${parsedData.fileFormat}`)
 
-            let button = clonedTemplate.getElementsByClassName('button');
-            let pdfbutton = clonedTemplate.getElementsByClassName('pdfbutton');
+            const button = clonedTemplate.getElementsByClassName('button');
+            const pdfbutton = clonedTemplate.getElementsByClassName('pdfbutton');
             let currentNum = num;
 
 
             pdfbutton[0].addEventListener('click', (e) => {
-                let img = new Image();
-                img.src = imgPath;
-                console.log(img.width, img.height);
-                let doc = new jspdf.jsPDF("p", "mm", "a4");
-                let width = doc.internal.pageSize.getWidth();
-                let height = doc.internal.pageSize.getHeight();
-                
-                doc.addImage(img, parsedData.fileFormat, 0, 0, width, height);
-                doc.save("export.pdf");
+                exportToPdf(imgPath, parsedData.fileFormat)
             });
 
             button[0].addEventListener('click', (e) => {
-
                 document.querySelectorAll(`[data-num="${currentNum}"]`).forEach((el) => {
-                    console.log(el);
                     el.remove();
                 });
             });
@@ -90,6 +79,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 })
+const exportToPdf = function(imgPath, imgFormat) {
+    const img = new Image();
+    img.src = imgPath;
+    console.log(img.width, img.height);
+    let doc = new jspdf.jsPDF("p", "mm", "a4");
+    const width = doc.internal.pageSize.getWidth();
+    const height = doc.internal.pageSize.getHeight();
+    
+    doc.addImage(img, imgFormat, 0, 0, width, height);
+    doc.save("export.pdf");
+}
 
 const printImage = async function(filename, fileformat) {
     const data = {
