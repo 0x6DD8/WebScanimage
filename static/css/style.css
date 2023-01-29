@@ -61,7 +61,13 @@ h1 {
     }
 }
 
-
 .template {
     visibility: hidden;
+}
+
+#footer {
+    font-size: smaller;
+    position: fixed;
+    bottom: 0;
+    color: rgba(255, 255, 255, 0.322);
 }

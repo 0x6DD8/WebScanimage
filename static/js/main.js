@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+    loadBuildVer();
+
     const form = document.getElementById('scan-form');
     const imgContainer =  document.getElementById('image-container');
     let num = 1;
@@ -101,4 +103,13 @@ const printImage = async function(filename, fileformat) {
         },
         body: JSON.stringify(data)
     }).catch(error => console.log('error', error));
+}
+
+const loadBuildVer = async function() {
+    await fetch('./buildver.json', {
+        method: 'GET'
+    }).then(response => response.text())
+    .then(result => {
+        document.getElementById("footer").innerText = `buildver: ${JSON.parse(result).buildver}`;
+    }).catch(error => console.log('error', error))
 }
