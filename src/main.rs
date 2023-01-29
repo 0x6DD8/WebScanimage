@@ -1,7 +1,7 @@
 use actix_web::{post, App, HttpResponse, HttpServer, Responder};
 use rand::Rng;
 use serde_json::json;
-use std::{process::Command};
+use std::{process::Command, time::{SystemTime, UNIX_EPOCH}};
 use actix_files as fs;
 
 //HTTP server port.
@@ -55,7 +55,7 @@ async fn printimage(req_body: String) -> impl Responder {
     
     let file_format = &formatted_body["format"];
     let file_name = &formatted_body["filename"];
-    
+
     //Execute lpr with parameters
     let mut lpr_command = Command::new("sh")
         .arg("-c")
@@ -76,6 +76,13 @@ async fn printimage(req_body: String) -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     println!("Server Started On Port: {}", PORT);
+
+    //save simple build number to json
+    std::fs::write(
+        "./static/buildver.json",
+        &format!("{{\"buildver\": {}}}", SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs())
+    ).unwrap();
+
     HttpServer::new(|| App::new()
         .service(scanimage)
         .service(printimage)
